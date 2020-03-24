@@ -40,6 +40,8 @@ public class FirebaseMessagingPlugin extends BroadcastReceiver
 
   private static final String CLICK_ACTION_VALUE = "FLUTTER_NOTIFICATION_CLICK";
   private static final String TAG = "FirebaseMessagingPlugin";
+  public static final String ACTION_TOKEN = "io.flutter.plugins.firebasemessaging.TOKEN";
+  public static final String EXTRA_TOKEN = "token";
 
   private MethodChannel channel;
   private Context applicationContext;
@@ -285,6 +287,12 @@ public class FirebaseMessagingPlugin extends BroadcastReceiver
       Boolean isEnabled = (Boolean) call.arguments();
       FirebaseMessaging.getInstance().setAutoInitEnabled(isEnabled);
       result.success(null);
+    } else if("setToken".equals(call.method)) {
+      String token = call.arguments();
+
+      Intent intent = new Intent(ACTION_TOKEN);
+      intent.putExtra(EXTRA_TOKEN, token);
+      LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent);
     } else {
       result.notImplemented();
     }

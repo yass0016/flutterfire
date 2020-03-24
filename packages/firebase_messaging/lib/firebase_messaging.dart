@@ -150,6 +150,11 @@ class FirebaseMessaging {
     return await _channel.invokeMethod<String>('getToken');
   }
 
+  /// set FCM token
+  Future<void> setToken(String token) {
+    return _channel.invokeMethod<void>('setToken', token);
+  }
+
   /// Subscribe to topic in background.
   ///
   /// [topic] must match the following regular expression:

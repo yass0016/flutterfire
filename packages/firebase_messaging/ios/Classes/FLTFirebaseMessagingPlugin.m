@@ -167,6 +167,17 @@ static NSObject<FlutterPluginRegistrar> *_registrar;
             result(instanceIDResult.token);
           }
         }];
+  } else if ([@"setToken" isEqualToString:method]) {
+    NSString *token = call.arguments;
+
+    #ifdef DEBUG
+      [[FIRMessaging messaging] setAPNSToken:token type:FIRMessagingAPNSTokenTypeSandbox];
+    #else
+      [[FIRMessaging messaging] setAPNSToken:token type:FIRMessagingAPNSTokenTypeProd];
+    #endif
+
+      [_channel invokeMethod:@"onToken" arguments:[FIRMessaging messaging].FCMToken];
+
   } else if ([@"deleteInstanceID" isEqualToString:method]) {
     [[FIRInstanceID instanceID] deleteIDWithHandler:^void(NSError *_Nullable error) {
       if (error.code != 0) {
